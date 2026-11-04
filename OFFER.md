@@ -34,7 +34,7 @@ By submitting an artwork, the author confirms that:
 ## 5. Takedown and corrections
 
 Any author or rights holder may request correction or removal:
-- Contact: [указать email]
+- Contact: [yvvinokurov1978@gmail.com]
 - Response time: within 72 hours
 - Removed works are moved to the "Negative collection" (ID + reason, no image shown)
 - All decisions are logged
