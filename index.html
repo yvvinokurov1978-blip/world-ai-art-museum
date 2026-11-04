@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en" data-lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>World AI Art Museum — Verified AI Art, Research-First</title>
+<meta name="description" content="Non-commercial research platform for verified AI-generated art. Discovered ≠ Verified ≠ Published.">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="header-inner">
+    <a href="#top" class="brand">
+      <span class="brand-mark">WAAM</span>
+      <span class="brand-name" data-i18n="brand">World AI Art Museum</span>
+    </a>
+    <nav class="nav">
+      <a href="#collection" data-i18n="nav.collection">Collection</a>
+      <a href="#models" data-i18n="nav.models">AI Models</a>
+      <a href="#discovery" data-i18n="nav.discovery">Discovery Engine</a>
+      <a href="#rights" data-i18n="nav.rights">Rights & Offer</a>
+      <a href="#contact" data-i18n="nav.contact">Contact</a>
+    </nav>
+    <button id="langToggle" class="lang-toggle" aria-label="Switch language">RU</button>
+  </div>
+</header>
+
+<main id="top">
+
+<section class="hero">
+  <div class="container">
+    <p class="eyebrow" data-i18n="hero.eyebrow">Non-commercial research project · Launch v1 · 2026-11-04</p>
+    <h1 data-i18n="hero.title">Verified AI art.<br>Research-first.</h1>
+    <p class="lead" data-i18n="hero.lead">A catalog of AI-generated artworks with documented provenance and a rights basis for every published work. Discovered ≠ Verified ≠ Published.</p>
+    <div class="status-grid">
+      <div class="status-card status-live">
+        <span class="status-dot"></span>
+        <strong data-i18n="hero.status.live.title">Working</strong>
+        <p data-i18n="hero.status.live.body">Static catalog with verified passports (10 works, external-link previews).</p>
+      </div>
+      <div class="status-card status-wip">
+        <span class="status-dot"></span>
+        <strong data-i18n="hero.status.wip.title">In development</strong>
+        <p data-i18n="hero.status.wip.body">Discovery Engine — Civitai connector (dry-run only, no auto-publication).</p>
+      </div>
+      <div class="status-card status-soon">
+        <span class="status-dot"></span>
+        <strong data-i18n="hero.status.soon.title">Coming later</strong>
+        <p data-i18n="hero.status.soon.body">Model comparison lab, international competitions, rating system.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="collection" class="section">
+  <div class="container">
+    <h2 data-i18n="collection.title">Collection</h2>
+    <p class="section-note" data-i18n="collection.note">Only works with confirmed provenance (A/B) and a documented rights basis are listed. Previews in this version are external-link only.</p>
+    <div id="collectionGrid" class="collection-grid" aria-live="polite">
+      <p class="loading" data-i18n="collection.loading">Loading catalog…</p>
+    </div>
+  </div>
+</section>
+
+<section id="models" class="section section-alt">
+  <div class="container">
+    <h2 data-i18n="models.title">AI Models</h2>
+    <p class="section-note" data-i18n="models.note">Models, generators, and versions are tracked separately. A language model, a generation interface, and a specific generator version are not the same entity.</p>
+    <div id="modelsTable" class="models-table"></div>
+  </div>
+</section>
+
+<section id="discovery" class="section">
+  <div class="container">
+    <h2 data-i18n="discovery.title">Discovery Engine</h2>
+    <p class="section-note" data-i18n="discovery.note">Pipeline: find → identify → verify provenance → verify rights → deduplicate → moderate → publish. Nothing enters the public collection automatically.</p>
+    <ol class="pipeline">
+      <li><span class="step">01</span><span data-i18n="discovery.step1">Source connectors (Civitai, Hugging Face, RSS)</span></li>
+      <li><span class="step">02</span><span data-i18n="discovery.step2">Ingestion & metadata normalization</span></li>
+      <li><span class="step">03</span><span data-i18n="discovery.step3">Provenance check (A/B/C, C2PA evidence)</span></li>
+      <li><span class="step">04</span><span data-i18n="discovery.step4">Rights check (rights_basis required)</span></li>
+      <li><span class="step">05</span><span data-i18n="discovery.step5">Duplicate detection (SHA-256, pHash)</span></li>
+      <li><span class="step">06</span><span data-i18n="discovery.step6">Human moderation</span></li>
+      <li><span class="step">07</span><span data-i18n="discovery.step7">Publication (verified only)</span></li>
+    </ol>
+    <p class="section-note" data-i18n="discovery.status">Status: dry-run CLI available in repository. Automated ingestion is not yet enabled.</p>
+  </div>
+</section>
+
+<section id="rights" class="section section-alt">
+  <div class="container">
+    <h2 data-i18n="rights.title">Rights & Offer</h2>
+    <p data-i18n="rights.body">WAAM does not claim copyright over published images. Every artwork carries a rights status and a rights basis. We respect an explicit author opt-out even when the formal license would permit display.</p>
+    <ul class="doc-links">
+      <li><a href="RIGHTS_POLICY.md" data-i18n="rights.policy">Rights Policy</a></li>
+      <li><a href="OFFER.md" data-i18n="rights.offer">Terms of Use (Offer)</a></li>
+      <li><a href="PASSPORT_SCHEMA.json" data-i18n="rights.schema">Passport Schema (JSON)</a></li>
+    </ul>
+  </div>
+</section>
+
+<section id="contact" class="section">
+  <div class="container">
+    <h2 data-i18n="contact.title">Contact & Takedown</h2>
+    <p data-i18n="contact.body">Authors and rights holders can request correction or removal. Response time: within 72 hours.</p>
+    <p class="contact-line"><a href="mailto:yvvinokurov1978@gmail.com">yvvinokurov1978@gmail.com</a></p>
+    <p class="contact-line"><a href="https://github.com/yvvinokurov1978-blip/world-ai-art-museum">github.com/yvvinokurov1978-blip/world-ai-art-museum</a></p>
+  </div>
+</section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <p data-i18n="footer.line">World AI Art Museum · Non-commercial research project · Launch v1 · 2026-11-04</p>
+  </div>
+</footer>
+
+<script src="assets/app.js"></script>
+</body>
+</html>
