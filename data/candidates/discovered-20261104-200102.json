@@ -1,0 +1,167 @@
+[
+  {
+    "passport_id": null,
+    "passport_version": 1,
+    "status": "discovered",
+    "title": "Untitled",
+    "category": null,
+    "creator": "Stellaaa",
+    "model_name": null,
+    "image_generator": "Civitai",
+    "model_version": null,
+    "source_id": "civitai",
+    "source_url": "https://civitai.com/images/12097475",
+    "external_id": 12097475,
+    "source_jurisdiction": "unknown",
+    "provenance_level": "C",
+    "provenance_evidence": [
+      {
+        "type": "api_response",
+        "uri": "https://civitai.com/api/v1/images?limit=5&nsfw=None&sort=Most%20Reactions&period=AllTime",
+        "hash": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+        "captured_at": "2026-11-04T20:01:02Z",
+        "captured_by": "connector:civitai"
+      }
+    ],
+    "rights_status": "unknown",
+    "rights_basis": null,
+    "rights_scope": "link_only",
+    "third_party_ip_risk": "unknown",
+    "preview_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/936f0e8d-c76f-4aa7-8b5c-37349f9b7da7/original=true/936f0e8d-c76f-4aa7-8b5c-37349f9b7da7.jpeg",
+    "discovered_at": "2026-11-04T20:01:02Z",
+    "created_at": "2026-11-04T20:01:02Z",
+    "updated_at": "2026-11-04T20:01:02Z"
+  },
+  {
+    "passport_id": null,
+    "passport_version": 1,
+    "status": "discovered",
+    "title": "Untitled",
+    "category": null,
+    "creator": "L10n_H34r7",
+    "model_name": null,
+    "image_generator": "Civitai",
+    "model_version": null,
+    "source_id": "civitai",
+    "source_url": "https://civitai.com/images/64399178",
+    "external_id": 64399178,
+    "source_jurisdiction": "unknown",
+    "provenance_level": "C",
+    "provenance_evidence": [
+      {
+        "type": "api_response",
+        "uri": "https://civitai.com/api/v1/images?limit=5&nsfw=None&sort=Most%20Reactions&period=AllTime",
+        "hash": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+        "captured_at": "2026-11-04T20:01:02Z",
+        "captured_by": "connector:civitai"
+      }
+    ],
+    "rights_status": "unknown",
+    "rights_basis": null,
+    "rights_scope": "link_only",
+    "third_party_ip_risk": "unknown",
+    "preview_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/db5208dd-da08-40c7-8ed4-bd67508740ac/original=true/db5208dd-da08-40c7-8ed4-bd67508740ac.jpeg",
+    "discovered_at": "2026-11-04T20:01:02Z",
+    "created_at": "2026-11-04T20:01:02Z",
+    "updated_at": "2026-11-04T20:01:02Z"
+  },
+  {
+    "passport_id": null,
+    "passport_version": 1,
+    "status": "discovered",
+    "title": "Untitled",
+    "category": null,
+    "creator": "fortylove",
+    "model_name": null,
+    "image_generator": "Civitai",
+    "model_version": null,
+    "source_id": "civitai",
+    "source_url": "https://civitai.com/images/17391786",
+    "external_id": 17391786,
+    "source_jurisdiction": "unknown",
+    "provenance_level": "C",
+    "provenance_evidence": [
+      {
+        "type": "api_response",
+        "uri": "https://civitai.com/api/v1/images?limit=5&nsfw=None&sort=Most%20Reactions&period=AllTime",
+        "hash": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+        "captured_at": "2026-11-04T20:01:02Z",
+        "captured_by": "connector:civitai"
+      }
+    ],
+    "rights_status": "unknown",
+    "rights_basis": null,
+    "rights_scope": "link_only",
+    "third_party_ip_risk": "unknown",
+    "preview_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/29ccc99b-e514-47a9-a361-924d4d13b100/original=true/29ccc99b-e514-47a9-a361-924d4d13b100.jpeg",
+    "discovered_at": "2026-11-04T20:01:02Z",
+    "created_at": "2026-11-04T20:01:02Z",
+    "updated_at": "2026-11-04T20:01:02Z"
+  },
+  {
+    "passport_id": null,
+    "passport_version": 1,
+    "status": "discovered",
+    "title": "Untitled",
+    "category": null,
+    "creator": "saper7474377",
+    "model_name": null,
+    "image_generator": "Civitai",
+    "model_version": null,
+    "source_id": "civitai",
+    "source_url": "https://civitai.com/images/11871535",
+    "external_id": 11871535,
+    "source_jurisdiction": "unknown",
+    "provenance_level": "C",
+    "provenance_evidence": [
+      {
+        "type": "api_response",
+        "uri": "https://civitai.com/api/v1/images?limit=5&nsfw=None&sort=Most%20Reactions&period=AllTime",
+        "hash": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+        "captured_at": "2026-11-04T20:01:02Z",
+        "captured_by": "connector:civitai"
+      }
+    ],
+    "rights_status": "unknown",
+    "rights_basis": null,
+    "rights_scope": "link_only",
+    "third_party_ip_risk": "unknown",
+    "preview_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/dd00de1d-ec6a-4848-bc8c-01d7a8437a5d/original=true/dd00de1d-ec6a-4848-bc8c-01d7a8437a5d.jpeg",
+    "discovered_at": "2026-11-04T20:01:02Z",
+    "created_at": "2026-11-04T20:01:02Z",
+    "updated_at": "2026-11-04T20:01:02Z"
+  },
+  {
+    "passport_id": null,
+    "passport_version": 1,
+    "status": "discovered",
+    "title": "Untitled",
+    "category": null,
+    "creator": "Pinkielicious",
+    "model_name": null,
+    "image_generator": "Civitai",
+    "model_version": null,
+    "source_id": "civitai",
+    "source_url": "https://civitai.com/images/61893679",
+    "external_id": 61893679,
+    "source_jurisdiction": "unknown",
+    "provenance_level": "C",
+    "provenance_evidence": [
+      {
+        "type": "api_response",
+        "uri": "https://civitai.com/api/v1/images?limit=5&nsfw=None&sort=Most%20Reactions&period=AllTime",
+        "hash": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+        "captured_at": "2026-11-04T20:01:02Z",
+        "captured_by": "connector:civitai"
+      }
+    ],
+    "rights_status": "unknown",
+    "rights_basis": null,
+    "rights_scope": "link_only",
+    "third_party_ip_risk": "unknown",
+    "preview_url": "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/012041fd-c1cb-4c08-b0dd-b4ae9148e9bc/original=true/012041fd-c1cb-4c08-b0dd-b4ae9148e9bc.jpeg",
+    "discovered_at": "2026-11-04T20:01:02Z",
+    "created_at": "2026-11-04T20:01:02Z",
+    "updated_at": "2026-11-04T20:01:02Z"
+  }
+]
