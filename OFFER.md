@@ -54,4 +54,4 @@ Any commercial use of a specific image would require a separate agreement with i
 
 Project: World AI Art Museum
 Repository: https://github.com/yvvinokurov1978-blip/world-ai-art-museum
-Email: [указать email]
+Email: [yvvinokurov1978@gmail.com]
