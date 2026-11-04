@@ -142,7 +142,7 @@
     localStorage.setItem('waam_lang', lang);
     document.documentElement.lang = lang;
     document.documentElement.setAttribute('data-lang', lang);
-    document.querySelectorAll('[data-i18n]').forEach(el => {
+    document.querySelectorAll('[data-i18n]').forEach(function (el) {
       const key = el.getAttribute('data-i18n');
       const val = translations[lang][key];
       if (val !== undefined) el.innerHTML = val;
@@ -157,29 +157,36 @@
     renderModels();
   }
 
-  document.getElementById('langToggle').addEventListener('click', () => {
-    const idx = langOrder.indexOf(currentLang);
-    applyLang(langOrder[(idx + 1) % langOrder.length]);
-  });
+  const toggleBtn = document.getElementById('langToggle');
+  if (toggleBtn) {
+    toggleBtn.addEventListener('click', function () {
+      const idx = langOrder.indexOf(currentLang);
+      applyLang(langOrder[(idx + 1) % langOrder.length]);
+    });
+  }
 
   let catalog = null;
   let modelsData = null;
 
-  async function loadJSON(path) {
-    try {
-      const res = await fetch(path + '?v=' + Date.now());
-      if (!res.ok) throw new Error(res.status);
-      return await res.json();
-    } catch (e) {
-      console.warn('Failed to load', path, e);
-      return null;
-    }
+  function loadJSON(path) {
+    return fetch(path + '?v=' + Date.now())
+      .then(function (res) {
+        if (!res.ok) throw new Error(res.status);
+        return res.json();
+      })
+      .catch(function (e) {
+        console.warn('Failed to load', path, e);
+        return null;
+      });
   }
 
-  async function ensureData() {
-    if (catalog !== null) return;
-    catalog = (await loadJSON('data/artworks.json')) || [];
-    modelsData = (await loadJSON('data/models.json')) || [];
+  function ensureData() {
+    if (catalog !== null) return Promise.resolve();
+    return Promise.all([loadJSON('data/artworks.json'), loadJSON('data/models.json')])
+      .then(function (results) {
+        catalog = results[0] || [];
+        modelsData = results[1] || [];
+      });
   }
 
   function esc(s) {
@@ -188,45 +195,75 @@
       .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
   }
 
-  async function renderCollection() {
+  function renderCollection() {
     const grid = document.getElementById('collectionGrid');
     if (!grid) return;
-    await ensureData();
-    const items = (catalog || []).filter(a => a.status === 'published');
-    if (!items.length) {
-      grid.innerHTML = '<p class="loading">' + esc(translations[currentLang]['collection.empty']) + '</p>';
-      return;
-    }
-    grid.innerHTML = items.map(a => {
-      const previewText = translations[currentLang]['collection.linkOnly'] || 'External preview';
-      const preview = a.preview_url
-        ? '<img src="' + esc(a.preview_url) + '" alt="' + esc(a.title) + '" loading="lazy" referrerpolicy="no-referrer">'
-        : '<span>' + esc(previewText) + '</span>';
-      const level = a.provenance_level || 'B';
-      const subtitle = [a.category, a.creator || (currentLang === 'en' ? 'Author unknown' : currentLang === 'ru' ? 'Автор неизвестен' : '作者未知')].filter(Boolean).join(' · ');
-      return '' +
-        '<article class="art-card">' +
-          '<div class="art-preview">' + preview + '</div>' +
-          '<div class="art-body">' +
-            '<p class="art-meta">' + esc(a.passport_id) + '</p>' +
-            '<h3 class="art-title">' + esc(a.title) + '</h3>' +
-            '<p class="art-meta">' + esc(subtitle) + '</p>' +
-            '<div>' +
-              '<span class="art-badge level-' + level.toLowerCase() + '">' + esc(currentLang === 'en' ? 'Provenance ' : currentLang === 'ru' ? 'Происхождение ' : '来源 ') + esc(level) + '</span>' +
-              '<span class="art-badge">' + esc(a.rights_status) + '</span>' +
+    ensureData().then(function () {
+      const items = (catalog || []).filter(function (a) { return a.status === 'published'; });
+      if (!items.length) {
+        grid.innerHTML = '<p class="loading">' + esc(translations[currentLang]['collection.empty']) + '</p>';
+        return;
+      }
+      grid.innerHTML = items.map(function (a) {
+        const previewText = translations[currentLang]['collection.linkOnly'] || 'External preview';
+        const preview = a.preview_url
+          ? '<img src="' + esc(a.preview_url) + '" alt="' + esc(a.title) + '" loading="lazy" referrerpolicy="no-referrer">'
+          : '<span>' + esc(previewText) + '</span>';
+        const level = a.provenance_level || 'B';
+        const unknownLabel = currentLang === 'en' ? 'Author unknown' : currentLang === 'ru' ? 'Автор неизвестен' : '作者未知';
+        const subtitle = [a.category, a.creator || unknownLabel].filter(Boolean).join(' · ');
+        const provLabel = currentLang === 'en' ? 'Provenance ' : currentLang === 'ru' ? 'Происхождение ' : '来源 ';
+        const srcLabel = currentLang === 'en' ? 'View source →' : currentLang === 'ru' ? 'Открыть источник →' : '打开来源 →';
+        return '' +
+          '<article class="art-card">' +
+            '<div class="art-preview">' + preview + '</div>' +
+            '<div class="art-body">' +
+              '<p class="art-meta">' + esc(a.passport_id) + '</p>' +
+              '<h3 class="art-title">' + esc(a.title) + '</h3>' +
+              '<p class="art-meta">' + esc(subtitle) + '</p>' +
+              '<div>' +
+                '<span class="art-badge level-' + level.toLowerCase() + '">' + esc(provLabel) + esc(level) + '</span>' +
+                '<span class="art-badge">' + esc(a.rights_status) + '</span>' +
+              '</div>' +
+              '<a class="art-link" href="' + esc(a.source_url) + '" target="_blank" rel="noopener">' + esc(srcLabel) + '</a>' +
             '</div>' +
-            '<a class="art-link" href="' + esc(a.source_url) + '" target="_blank" rel="noopener">' +
-              esc(currentLang === 'en' ? 'View source →' : currentLang === 'ru' ? 'Открыть источник →' : '打开来源 →') +
-            '</a>' +
-          '</div>' +
-        '</article>';
-    }).join('');
+          '</article>';
+      }).join('');
+    });
   }
 
-  async function renderModels() {
+  function renderModels() {
     const el = document.getElementById('modelsTable');
     if (!el) return;
-    await ensureData();
-    const list = (modelsData || []).filter(m => m.model_name && m.model_name !== '—');
-    if (!list.length) {
-      el.innerHTML = '<p class
+    ensureData().then(function () {
+      const list = (modelsData || []).filter(function (m) { return m.model_name && m.model_name !== '—'; });
+      if (!list.length) {
+        el.innerHTML = '<p class="loading">' + esc(translations[currentLang]['models.empty']) + '</p>';
+        return;
+      }
+      const rows = list.map(function (m) {
+        return '<tr>' +
+          '<td>' + esc(m.model_name) + '</td>' +
+          '<td>' + esc(m.image_generator || '—') + '</td>' +
+          '<td class="mono">' + esc(m.model_version || '—') + '</td>' +
+          '<td>' + esc(m.works_count != null ? m.works_count : '—') + '</td>' +
+        '</tr>';
+      }).join('');
+      const hModel = currentLang === 'en' ? 'Model' : currentLang === 'ru' ? 'Модель' : '模型';
+      const hGen = currentLang === 'en' ? 'Generator' : currentLang === 'ru' ? 'Генератор' : '生成器';
+      const hVer = currentLang === 'en' ? 'Version' : currentLang === 'ru' ? 'Версия' : '版本';
+      const hWorks = currentLang === 'en' ? 'Works' : currentLang === 'ru' ? 'Работ' : '作品数';
+      el.innerHTML =
+        '<table class="models-table"><thead><tr>' +
+          '<th>' + esc(hModel) + '</th>' +
+          '<th>' + esc(hGen) + '</th>' +
+          '<th>' + esc(hVer) + '</th>' +
+          '<th>' + esc(hWorks) + '</th>' +
+        '</tr></thead><tbody>' + rows + '</tbody></table>';
+    });
+  }
+
+  applyLang(currentLang);
+  renderCollection();
+  renderModels();
+})();
