@@ -1,0 +1,136 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://waam.example/schemas/passport.json",
+  "title": "WAAM Artwork Passport",
+  "version": "1.0",
+  "type": "object",
+  "required": [
+    "passport_id",
+    "passport_version",
+    "status",
+    "title",
+    "provenance_level",
+    "rights_status",
+    "rights_basis",
+    "third_party_ip_risk",
+    "source_jurisdiction",
+    "provenance_evidence",
+    "created_at",
+    "updated_at"
+  ],
+  "properties": {
+    "passport_id": {
+      "type": "string",
+      "pattern": "^WAAM-[0-9]{4}-[0-9]{4}$",
+      "description": "Format: WAAM-YYYY-NNNN. Never reused after removal."
+    },
+    "passport_version": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "status": {
+      "enum": ["discovered", "verified", "published"]
+    },
+    "title": { "type": "string" },
+    "creator": {
+      "type": ["string", "null"],
+      "description": "Null if unknown. Never invented."
+    },
+    "model_name": { "type": ["string", "null"] },
+    "image_generator": { "type": ["string", "null"] },
+    "model_version": { "type": ["string", "null"] },
+    "created_date": { "type": ["string", "null"], "format": "date" },
+    "source_id": { "type": "string" },
+    "source_url": { "type": "string", "format": "uri" },
+    "source_jurisdiction": {
+      "type": "string",
+      "description": "ISO 3166-1 alpha-2 or 'unknown'"
+    },
+    "provenance_level": { "enum": ["A", "B", "C"] },
+    "provenance_evidence": {
+      "type": "array",
+      "minItems": 0,
+      "items": {
+        "type": "object",
+        "required": ["type", "uri", "hash", "captured_at"],
+        "properties": {
+          "type": {
+            "enum": ["c2pa_manifest", "api_response", "generation_log", "author_confirmation", "screenshot"]
+          },
+          "uri": { "type": "string", "format": "uri" },
+          "hash": { "type": "string", "pattern": "^sha256:[a-f0-9]{64}$" },
+          "captured_at": { "type": "string", "format": "date-time" },
+          "captured_by": { "type": "string" }
+        }
+      }
+    },
+    "rights_status": {
+      "enum": ["confirmed", "external_link_only", "unknown", "denied"]
+    },
+    "rights_basis": {
+      "type": "string",
+      "description": "URL or document identifier. Required unless rights_status is 'unknown' or 'denied'. A decision without rights_basis is invalid."
+    },
+    "rights_scope": {
+      "enum": ["display", "thumbnail", "link_only"]
+    },
+    "third_party_ip_risk": {
+      "enum": ["low", "medium", "high", "unknown"]
+    },
+    "content_hash": {
+      "type": ["string", "null"],
+      "pattern": "^sha256:[a-f0-9]{64}$"
+    },
+    "genre": { "type": ["string", "null"] },
+    "style": { "type": ["string", "null"] },
+    "history": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["event", "timestamp"],
+        "properties": {
+          "event": { "type": "string" },
+          "timestamp": { "type": "string", "format": "date-time" },
+          "actor": { "type": "string" },
+          "reason": { "type": "string" }
+        }
+      }
+    },
+    "supersedes": { "type": ["string", "null"] },
+    "superseded_by": { "type": ["string", "null"] },
+    "created_at": { "type": "string", "format": "date-time" },
+    "updated_at": { "type": "string", "format": "date-time" }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": { "status": { "const": "published" } }
+      },
+      "then": {
+        "properties": {
+          "rights_status": { "enum": ["confirmed", "external_link_only"] },
+          "provenance_level": { "enum": ["A", "B"] },
+          "third_party_ip_risk": { "enum": ["low", "medium"] }
+        },
+        "required": ["rights_basis", "content_hash"]
+      }
+    },
+    {
+      "if": {
+        "properties": { "provenance_level": { "const": "A" } }
+      },
+      "then": {
+        "properties": {
+          "provenance_evidence": {
+            "minItems": 1,
+            "contains": {
+              "properties": {
+                "type": { "enum": ["c2pa_manifest", "api_response", "generation_log"] }
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
+}
