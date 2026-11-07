@@ -1,0 +1,502 @@
+﻿[
+    {
+        "passport_id":  null,
+        "passport_version":  1,
+        "status":  "discovered",
+        "title":  "Untitled",
+        "category":  null,
+        "creator":  "Stellaaa",
+        "model_name":  null,
+        "image_generator":  "Civitai",
+        "model_version":  null,
+        "source_id":  "civitai",
+        "source_url":  "https://civitai.com/images/12097475",
+        "external_id":  12097475,
+        "source_jurisdiction":  "unknown",
+        "provenance_level":  "A",
+        "provenance_evidence":  [
+                                    {
+                                        "type":  "api_response",
+                                        "uri":  "https://civitai.com/api/v1/images?limit=5\u0026nsfw=None\u0026sort=Most%20Reactions\u0026period=AllTime",
+                                        "hash":  "sha256:f744729bb4e5cfada8e3f3f718bc5648c67d0b2afeba29c2dda8936bcaec1462",
+                                        "captured_at":  "2026-11-04T20:01:02Z",
+                                        "captured_by":  "connector:civitai"
+                                    }
+                                ],
+        "rights_status":  "unknown",
+        "rights_basis":  null,
+        "rights_scope":  "link_only",
+        "third_party_ip_risk":  "unknown",
+        "preview_url":  "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/936f0e8d-c76f-4aa7-8b5c-37349f9b7da7/original=true/936f0e8d-c76f-4aa7-8b5c-37349f9b7da7.jpeg",
+        "discovered_at":  "2026-11-04T20:01:02Z",
+        "created_at":  "2026-11-04T20:01:02Z",
+        "updated_at":  "2026-11-07T09:14:47Z",
+        "verification":  {
+                             "verified_at":  "2026-11-07T09:14:47Z",
+                             "verdict":  "review",
+                             "reasons":  [
+                                             "HASH_RECOMPUTED:api_response",
+                                             "RIGHTS_UNKNOWN",
+                                             "JURISDICTION_UNKNOWN",
+                                             "IP_RISK_UNASSESSED"
+                                         ],
+                             "rights_hint":  null
+                         },
+        "history":  {
+                        "event":  "auto_verified",
+                        "timestamp":  "2026-11-07T09:14:47Z",
+                        "actor":  "cli/verify.ps1",
+                        "reason":  "review: HASH_RECOMPUTED:api_response,RIGHTS_UNKNOWN,JURISDICTION_UNKNOWN,IP_RISK_UNASSESSED"
+                    }
+    },
+    {
+        "passport_id":  null,
+        "passport_version":  1,
+        "status":  "discovered",
+        "title":  "Untitled",
+        "category":  null,
+        "creator":  "L10n_H34r7",
+        "model_name":  null,
+        "image_generator":  "Civitai",
+        "model_version":  null,
+        "source_id":  "civitai",
+        "source_url":  "https://civitai.com/images/64399178",
+        "external_id":  64399178,
+        "source_jurisdiction":  "unknown",
+        "provenance_level":  "A",
+        "provenance_evidence":  [
+                                    {
+                                        "type":  "api_response",
+                                        "uri":  "https://civitai.com/api/v1/images?limit=5\u0026nsfw=None\u0026sort=Most%20Reactions\u0026period=AllTime",
+                                        "hash":  "sha256:f744729bb4e5cfada8e3f3f718bc5648c67d0b2afeba29c2dda8936bcaec1462",
+                                        "captured_at":  "2026-11-04T20:01:02Z",
+                                        "captured_by":  "connector:civitai"
+                                    }
+                                ],
+        "rights_status":  "unknown",
+        "rights_basis":  null,
+        "rights_scope":  "link_only",
+        "third_party_ip_risk":  "unknown",
+        "preview_url":  "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/db5208dd-da08-40c7-8ed4-bd67508740ac/original=true/db5208dd-da08-40c7-8ed4-bd67508740ac.jpeg",
+        "discovered_at":  "2026-11-04T20:01:02Z",
+        "created_at":  "2026-11-04T20:01:02Z",
+        "updated_at":  "2026-11-07T09:14:47Z",
+        "verification":  {
+                             "verified_at":  "2026-11-07T09:14:47Z",
+                             "verdict":  "review",
+                             "reasons":  [
+                                             "HASH_RECOMPUTED:api_response",
+                                             "RIGHTS_UNKNOWN",
+                                             "JURISDICTION_UNKNOWN",
+                                             "IP_RISK_UNASSESSED"
+                                         ],
+                             "rights_hint":  null
+                         },
+        "history":  {
+                        "event":  "auto_verified",
+                        "timestamp":  "2026-11-07T09:14:47Z",
+                        "actor":  "cli/verify.ps1",
+                        "reason":  "review: HASH_RECOMPUTED:api_response,RIGHTS_UNKNOWN,JURISDICTION_UNKNOWN,IP_RISK_UNASSESSED"
+                    }
+    },
+    {
+        "passport_id":  null,
+        "passport_version":  1,
+        "status":  "discovered",
+        "title":  "Untitled",
+        "category":  null,
+        "creator":  "fortylove",
+        "model_name":  null,
+        "image_generator":  "Civitai",
+        "model_version":  null,
+        "source_id":  "civitai",
+        "source_url":  "https://civitai.com/images/17391786",
+        "external_id":  17391786,
+        "source_jurisdiction":  "unknown",
+        "provenance_level":  "A",
+        "provenance_evidence":  [
+                                    {
+                                        "type":  "api_response",
+                                        "uri":  "https://civitai.com/api/v1/images?limit=5\u0026nsfw=None\u0026sort=Most%20Reactions\u0026period=AllTime",
+                                        "hash":  "sha256:f744729bb4e5cfada8e3f3f718bc5648c67d0b2afeba29c2dda8936bcaec1462",
+                                        "captured_at":  "2026-11-04T20:01:02Z",
+                                        "captured_by":  "connector:civitai"
+                                    }
+                                ],
+        "rights_status":  "unknown",
+        "rights_basis":  null,
+        "rights_scope":  "link_only",
+        "third_party_ip_risk":  "unknown",
+        "preview_url":  "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/29ccc99b-e514-47a9-a361-924d4d13b100/original=true/29ccc99b-e514-47a9-a361-924d4d13b100.jpeg",
+        "discovered_at":  "2026-11-04T20:01:02Z",
+        "created_at":  "2026-11-04T20:01:02Z",
+        "updated_at":  "2026-11-07T09:14:47Z",
+        "verification":  {
+                             "verified_at":  "2026-11-07T09:14:47Z",
+                             "verdict":  "review",
+                             "reasons":  [
+                                             "HASH_RECOMPUTED:api_response",
+                                             "RIGHTS_UNKNOWN",
+                                             "JURISDICTION_UNKNOWN",
+                                             "IP_RISK_UNASSESSED"
+                                         ],
+                             "rights_hint":  null
+                         },
+        "history":  {
+                        "event":  "auto_verified",
+                        "timestamp":  "2026-11-07T09:14:47Z",
+                        "actor":  "cli/verify.ps1",
+                        "reason":  "review: HASH_RECOMPUTED:api_response,RIGHTS_UNKNOWN,JURISDICTION_UNKNOWN,IP_RISK_UNASSESSED"
+                    }
+    },
+    {
+        "passport_id":  null,
+        "passport_version":  1,
+        "status":  "discovered",
+        "title":  "Untitled",
+        "category":  null,
+        "creator":  "saper7474377",
+        "model_name":  null,
+        "image_generator":  "Civitai",
+        "model_version":  null,
+        "source_id":  "civitai",
+        "source_url":  "https://civitai.com/images/11871535",
+        "external_id":  11871535,
+        "source_jurisdiction":  "unknown",
+        "provenance_level":  "A",
+        "provenance_evidence":  [
+                                    {
+                                        "type":  "api_response",
+                                        "uri":  "https://civitai.com/api/v1/images?limit=5\u0026nsfw=None\u0026sort=Most%20Reactions\u0026period=AllTime",
+                                        "hash":  "sha256:f744729bb4e5cfada8e3f3f718bc5648c67d0b2afeba29c2dda8936bcaec1462",
+                                        "captured_at":  "2026-11-04T20:01:02Z",
+                                        "captured_by":  "connector:civitai"
+                                    }
+                                ],
+        "rights_status":  "unknown",
+        "rights_basis":  null,
+        "rights_scope":  "link_only",
+        "third_party_ip_risk":  "unknown",
+        "preview_url":  "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/dd00de1d-ec6a-4848-bc8c-01d7a8437a5d/original=true/dd00de1d-ec6a-4848-bc8c-01d7a8437a5d.jpeg",
+        "discovered_at":  "2026-11-04T20:01:02Z",
+        "created_at":  "2026-11-04T20:01:02Z",
+        "updated_at":  "2026-11-07T09:14:47Z",
+        "verification":  {
+                             "verified_at":  "2026-11-07T09:14:47Z",
+                             "verdict":  "review",
+                             "reasons":  [
+                                             "HASH_RECOMPUTED:api_response",
+                                             "RIGHTS_UNKNOWN",
+                                             "JURISDICTION_UNKNOWN",
+                                             "IP_RISK_UNASSESSED"
+                                         ],
+                             "rights_hint":  null
+                         },
+        "history":  {
+                        "event":  "auto_verified",
+                        "timestamp":  "2026-11-07T09:14:47Z",
+                        "actor":  "cli/verify.ps1",
+                        "reason":  "review: HASH_RECOMPUTED:api_response,RIGHTS_UNKNOWN,JURISDICTION_UNKNOWN,IP_RISK_UNASSESSED"
+                    }
+    },
+    {
+        "passport_id":  null,
+        "passport_version":  1,
+        "status":  "discovered",
+        "title":  "Untitled",
+        "category":  null,
+        "creator":  "Pinkielicious",
+        "model_name":  null,
+        "image_generator":  "Civitai",
+        "model_version":  null,
+        "source_id":  "civitai",
+        "source_url":  "https://civitai.com/images/61893679",
+        "external_id":  61893679,
+        "source_jurisdiction":  "unknown",
+        "provenance_level":  "A",
+        "provenance_evidence":  [
+                                    {
+                                        "type":  "api_response",
+                                        "uri":  "https://civitai.com/api/v1/images?limit=5\u0026nsfw=None\u0026sort=Most%20Reactions\u0026period=AllTime",
+                                        "hash":  "sha256:f744729bb4e5cfada8e3f3f718bc5648c67d0b2afeba29c2dda8936bcaec1462",
+                                        "captured_at":  "2026-11-04T20:01:02Z",
+                                        "captured_by":  "connector:civitai"
+                                    }
+                                ],
+        "rights_status":  "unknown",
+        "rights_basis":  null,
+        "rights_scope":  "link_only",
+        "third_party_ip_risk":  "unknown",
+        "preview_url":  "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/012041fd-c1cb-4c08-b0dd-b4ae9148e9bc/original=true/012041fd-c1cb-4c08-b0dd-b4ae9148e9bc.jpeg",
+        "discovered_at":  "2026-11-04T20:01:02Z",
+        "created_at":  "2026-11-04T20:01:02Z",
+        "updated_at":  "2026-11-07T09:14:47Z",
+        "verification":  {
+                             "verified_at":  "2026-11-07T09:14:47Z",
+                             "verdict":  "review",
+                             "reasons":  [
+                                             "HASH_RECOMPUTED:api_response",
+                                             "RIGHTS_UNKNOWN",
+                                             "JURISDICTION_UNKNOWN",
+                                             "IP_RISK_UNASSESSED"
+                                         ],
+                             "rights_hint":  null
+                         },
+        "history":  {
+                        "event":  "auto_verified",
+                        "timestamp":  "2026-11-07T09:14:47Z",
+                        "actor":  "cli/verify.ps1",
+                        "reason":  "review: HASH_RECOMPUTED:api_response,RIGHTS_UNKNOWN,JURISDICTION_UNKNOWN,IP_RISK_UNASSESSED"
+                    }
+    },
+    {
+        "passport_id":  null,
+        "passport_version":  1,
+        "status":  "discovered",
+        "title":  "Untitled",
+        "category":  null,
+        "creator":  "Stellaaa",
+        "model_name":  null,
+        "image_generator":  "Civitai",
+        "model_version":  null,
+        "source_id":  "civitai",
+        "source_url":  "https://civitai.com/images/12097475",
+        "external_id":  12097475,
+        "source_jurisdiction":  "unknown",
+        "provenance_level":  "A",
+        "provenance_evidence":  [
+                                    {
+                                        "type":  "api_response",
+                                        "uri":  "https://civitai.com/api/v1/images?limit=5\u0026nsfw=None\u0026sort=Most%20Reactions\u0026period=AllTime",
+                                        "hash":  "sha256:a489792a4d84621afbe1f29ce350c1ef70ab21a0c250014f6bf782fa05660192",
+                                        "captured_at":  "2026-11-07T09:09:42Z",
+                                        "captured_by":  "connector:civitai"
+                                    }
+                                ],
+        "rights_status":  "unknown",
+        "rights_basis":  null,
+        "rights_scope":  "link_only",
+        "third_party_ip_risk":  "unknown",
+        "preview_url":  "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/936f0e8d-c76f-4aa7-8b5c-37349f9b7da7/original=true/936f0e8d-c76f-4aa7-8b5c-37349f9b7da7.jpeg",
+        "discovered_at":  "2026-11-07T09:09:42Z",
+        "created_at":  "2026-11-07T09:09:42Z",
+        "updated_at":  "2026-11-07T09:14:47Z",
+        "verification":  {
+                             "verified_at":  "2026-11-07T09:14:47Z",
+                             "verdict":  "review",
+                             "reasons":  [
+                                             "HASH_RECOMPUTED:api_response",
+                                             "RIGHTS_UNKNOWN",
+                                             "JURISDICTION_UNKNOWN",
+                                             "IP_RISK_UNASSESSED"
+                                         ],
+                             "rights_hint":  null
+                         },
+        "history":  {
+                        "event":  "auto_verified",
+                        "timestamp":  "2026-11-07T09:14:47Z",
+                        "actor":  "cli/verify.ps1",
+                        "reason":  "review: HASH_RECOMPUTED:api_response,RIGHTS_UNKNOWN,JURISDICTION_UNKNOWN,IP_RISK_UNASSESSED"
+                    }
+    },
+    {
+        "passport_id":  null,
+        "passport_version":  1,
+        "status":  "discovered",
+        "title":  "Untitled",
+        "category":  null,
+        "creator":  "L10n_H34r7",
+        "model_name":  null,
+        "image_generator":  "Civitai",
+        "model_version":  null,
+        "source_id":  "civitai",
+        "source_url":  "https://civitai.com/images/64399178",
+        "external_id":  64399178,
+        "source_jurisdiction":  "unknown",
+        "provenance_level":  "A",
+        "provenance_evidence":  [
+                                    {
+                                        "type":  "api_response",
+                                        "uri":  "https://civitai.com/api/v1/images?limit=5\u0026nsfw=None\u0026sort=Most%20Reactions\u0026period=AllTime",
+                                        "hash":  "sha256:a489792a4d84621afbe1f29ce350c1ef70ab21a0c250014f6bf782fa05660192",
+                                        "captured_at":  "2026-11-07T09:09:42Z",
+                                        "captured_by":  "connector:civitai"
+                                    }
+                                ],
+        "rights_status":  "unknown",
+        "rights_basis":  null,
+        "rights_scope":  "link_only",
+        "third_party_ip_risk":  "unknown",
+        "preview_url":  "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/db5208dd-da08-40c7-8ed4-bd67508740ac/original=true/db5208dd-da08-40c7-8ed4-bd67508740ac.jpeg",
+        "discovered_at":  "2026-11-07T09:09:42Z",
+        "created_at":  "2026-11-07T09:09:42Z",
+        "updated_at":  "2026-11-07T09:14:47Z",
+        "verification":  {
+                             "verified_at":  "2026-11-07T09:14:47Z",
+                             "verdict":  "review",
+                             "reasons":  [
+                                             "HASH_RECOMPUTED:api_response",
+                                             "RIGHTS_UNKNOWN",
+                                             "JURISDICTION_UNKNOWN",
+                                             "IP_RISK_UNASSESSED"
+                                         ],
+                             "rights_hint":  null
+                         },
+        "history":  {
+                        "event":  "auto_verified",
+                        "timestamp":  "2026-11-07T09:14:47Z",
+                        "actor":  "cli/verify.ps1",
+                        "reason":  "review: HASH_RECOMPUTED:api_response,RIGHTS_UNKNOWN,JURISDICTION_UNKNOWN,IP_RISK_UNASSESSED"
+                    }
+    },
+    {
+        "passport_id":  null,
+        "passport_version":  1,
+        "status":  "discovered",
+        "title":  "Untitled",
+        "category":  null,
+        "creator":  "fortylove",
+        "model_name":  null,
+        "image_generator":  "Civitai",
+        "model_version":  null,
+        "source_id":  "civitai",
+        "source_url":  "https://civitai.com/images/17391786",
+        "external_id":  17391786,
+        "source_jurisdiction":  "unknown",
+        "provenance_level":  "A",
+        "provenance_evidence":  [
+                                    {
+                                        "type":  "api_response",
+                                        "uri":  "https://civitai.com/api/v1/images?limit=5\u0026nsfw=None\u0026sort=Most%20Reactions\u0026period=AllTime",
+                                        "hash":  "sha256:a489792a4d84621afbe1f29ce350c1ef70ab21a0c250014f6bf782fa05660192",
+                                        "captured_at":  "2026-11-07T09:09:42Z",
+                                        "captured_by":  "connector:civitai"
+                                    }
+                                ],
+        "rights_status":  "unknown",
+        "rights_basis":  null,
+        "rights_scope":  "link_only",
+        "third_party_ip_risk":  "unknown",
+        "preview_url":  "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/29ccc99b-e514-47a9-a361-924d4d13b100/original=true/29ccc99b-e514-47a9-a361-924d4d13b100.jpeg",
+        "discovered_at":  "2026-11-07T09:09:42Z",
+        "created_at":  "2026-11-07T09:09:42Z",
+        "updated_at":  "2026-11-07T09:14:47Z",
+        "verification":  {
+                             "verified_at":  "2026-11-07T09:14:47Z",
+                             "verdict":  "review",
+                             "reasons":  [
+                                             "HASH_RECOMPUTED:api_response",
+                                             "RIGHTS_UNKNOWN",
+                                             "JURISDICTION_UNKNOWN",
+                                             "IP_RISK_UNASSESSED"
+                                         ],
+                             "rights_hint":  null
+                         },
+        "history":  {
+                        "event":  "auto_verified",
+                        "timestamp":  "2026-11-07T09:14:47Z",
+                        "actor":  "cli/verify.ps1",
+                        "reason":  "review: HASH_RECOMPUTED:api_response,RIGHTS_UNKNOWN,JURISDICTION_UNKNOWN,IP_RISK_UNASSESSED"
+                    }
+    },
+    {
+        "passport_id":  null,
+        "passport_version":  1,
+        "status":  "discovered",
+        "title":  "Untitled",
+        "category":  null,
+        "creator":  "saper7474377",
+        "model_name":  null,
+        "image_generator":  "Civitai",
+        "model_version":  null,
+        "source_id":  "civitai",
+        "source_url":  "https://civitai.com/images/11871535",
+        "external_id":  11871535,
+        "source_jurisdiction":  "unknown",
+        "provenance_level":  "A",
+        "provenance_evidence":  [
+                                    {
+                                        "type":  "api_response",
+                                        "uri":  "https://civitai.com/api/v1/images?limit=5\u0026nsfw=None\u0026sort=Most%20Reactions\u0026period=AllTime",
+                                        "hash":  "sha256:a489792a4d84621afbe1f29ce350c1ef70ab21a0c250014f6bf782fa05660192",
+                                        "captured_at":  "2026-11-07T09:09:42Z",
+                                        "captured_by":  "connector:civitai"
+                                    }
+                                ],
+        "rights_status":  "unknown",
+        "rights_basis":  null,
+        "rights_scope":  "link_only",
+        "third_party_ip_risk":  "unknown",
+        "preview_url":  "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/dd00de1d-ec6a-4848-bc8c-01d7a8437a5d/original=true/dd00de1d-ec6a-4848-bc8c-01d7a8437a5d.jpeg",
+        "discovered_at":  "2026-11-07T09:09:42Z",
+        "created_at":  "2026-11-07T09:09:42Z",
+        "updated_at":  "2026-11-07T09:14:47Z",
+        "verification":  {
+                             "verified_at":  "2026-11-07T09:14:47Z",
+                             "verdict":  "review",
+                             "reasons":  [
+                                             "HASH_RECOMPUTED:api_response",
+                                             "RIGHTS_UNKNOWN",
+                                             "JURISDICTION_UNKNOWN",
+                                             "IP_RISK_UNASSESSED"
+                                         ],
+                             "rights_hint":  null
+                         },
+        "history":  {
+                        "event":  "auto_verified",
+                        "timestamp":  "2026-11-07T09:14:47Z",
+                        "actor":  "cli/verify.ps1",
+                        "reason":  "review: HASH_RECOMPUTED:api_response,RIGHTS_UNKNOWN,JURISDICTION_UNKNOWN,IP_RISK_UNASSESSED"
+                    }
+    },
+    {
+        "passport_id":  null,
+        "passport_version":  1,
+        "status":  "discovered",
+        "title":  "Untitled",
+        "category":  null,
+        "creator":  "Pinkielicious",
+        "model_name":  null,
+        "image_generator":  "Civitai",
+        "model_version":  null,
+        "source_id":  "civitai",
+        "source_url":  "https://civitai.com/images/61893679",
+        "external_id":  61893679,
+        "source_jurisdiction":  "unknown",
+        "provenance_level":  "A",
+        "provenance_evidence":  [
+                                    {
+                                        "type":  "api_response",
+                                        "uri":  "https://civitai.com/api/v1/images?limit=5\u0026nsfw=None\u0026sort=Most%20Reactions\u0026period=AllTime",
+                                        "hash":  "sha256:a489792a4d84621afbe1f29ce350c1ef70ab21a0c250014f6bf782fa05660192",
+                                        "captured_at":  "2026-11-07T09:09:42Z",
+                                        "captured_by":  "connector:civitai"
+                                    }
+                                ],
+        "rights_status":  "unknown",
+        "rights_basis":  null,
+        "rights_scope":  "link_only",
+        "third_party_ip_risk":  "unknown",
+        "preview_url":  "https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/012041fd-c1cb-4c08-b0dd-b4ae9148e9bc/original=true/012041fd-c1cb-4c08-b0dd-b4ae9148e9bc.jpeg",
+        "discovered_at":  "2026-11-07T09:09:42Z",
+        "created_at":  "2026-11-07T09:09:42Z",
+        "updated_at":  "2026-11-07T09:14:47Z",
+        "verification":  {
+                             "verified_at":  "2026-11-07T09:14:47Z",
+                             "verdict":  "review",
+                             "reasons":  [
+                                             "HASH_RECOMPUTED:api_response",
+                                             "RIGHTS_UNKNOWN",
+                                             "JURISDICTION_UNKNOWN",
+                                             "IP_RISK_UNASSESSED"
+                                         ],
+                             "rights_hint":  null
+                         },
+        "history":  {
+                        "event":  "auto_verified",
+                        "timestamp":  "2026-11-07T09:14:47Z",
+                        "actor":  "cli/verify.ps1",
+                        "reason":  "review: HASH_RECOMPUTED:api_response,RIGHTS_UNKNOWN,JURISDICTION_UNKNOWN,IP_RISK_UNASSESSED"
+                    }
+    }
+]

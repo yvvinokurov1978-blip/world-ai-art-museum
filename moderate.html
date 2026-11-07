@@ -1,0 +1,1197 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WAAM — Модерация</title>
+<style>
+  :root {
+    --bg: #f5f6f8;
+    --card: #ffffff;
+    --border: #d9dde3;
+    --text: #1d2330;
+    --muted: #6b7280;
+    --pass: #1a7f37;
+    --review: #b58900;
+    --fail: #b3261e;
+    --accent: #2b5d9c;
+    --accent-hover: #1f4a7e;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    font-size: 14px;
+  }
+  header {
+    background: #1d2330;
+    color: #fff;
+    padding: 16px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  header h1 { font-size: 18px; margin: 0; font-weight: 600; }
+  header .sub { color: #9aa4b2; font-size: 12px; }
+  .container { max-width: 1200px; margin: 0 auto; padding: 20px 24px; }
+  .panel {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 16px 20px;
+    margin-bottom: 20px;
+  }
+  .panel h2 { font-size: 15px; margin: 0 0 12px; font-weight: 600; }
+  .row { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+  .row + .row { margin-top: 10px; }
+  button {
+    font: inherit;
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    padding: 8px 14px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 500;
+  }
+  button:hover:not(:disabled) { background: var(--accent-hover); }
+  button:disabled { opacity: .45; cursor: not-allowed; }
+  button.secondary { background: #e6e9ee; color: var(--text); }
+  button.secondary:hover:not(:disabled) { background: #d6dbe2; }
+  button.danger { background: var(--fail); }
+  button.danger:hover:not(:disabled) { background: #8f1e18; }
+  button.ok { background: var(--pass); }
+  button.ok:hover:not(:disabled) { background: #136029; }
+  button.warn { background: var(--review); }
+  button.warn:hover:not(:disabled) { background: #8f6d00; }
+  input[type="file"] { display: none; }
+  .file-label {
+    display: inline-block;
+    background: var(--accent);
+    color: #fff;
+    padding: 8px 14px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 500;
+  }
+  .file-label:hover { background: var(--accent-hover); }
+  .muted { color: var(--muted); font-size: 12px; }
+  .stats { display: flex; gap: 16px; flex-wrap: wrap; }
+  .stat { background: #eef1f5; border-radius: 6px; padding: 8px 14px; }
+  .stat b { font-size: 16px; }
+  .stat.pass b { color: var(--pass); }
+  .stat.review b { color: var(--review); }
+  .stat.fail b { color: var(--fail); }
+
+  /* Candidate card */
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 14px 18px;
+    margin-bottom: 14px;
+  }
+  .card.decided { border-left: 4px solid var(--pass); }
+  .card.decided.rejected { border-left-color: var(--fail); }
+  .card.decided.deferred { border-left-color: var(--review); }
+  .card-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+  .card-title { font-weight: 600; font-size: 15px; margin: 0 0 4px; word-break: break-word; }
+  .badge {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 10px;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+  }
+  .badge.pass { background: #d5f0dc; color: var(--pass); }
+  .badge.review { background: #f6e9b8; color: var(--review); }
+  .badge.fail { background: #f8d7d4; color: var(--fail); }
+  .badge.decision { background: #d7e5f7; color: var(--accent); }
+  .kv { display: grid; grid-template-columns: 180px 1fr; gap: 4px 12px; margin: 12px 0; font-size: 13px; }
+  .kv dt { color: var(--muted); }
+  .kv dd { margin: 0; word-break: break-word; }
+  .kv dd a { color: var(--accent); }
+  .reasons { margin-top: 4px; }
+  .reason-chip {
+    display: inline-block;
+    background: #eef1f5;
+    border-radius: 4px;
+    padding: 1px 6px;
+    margin: 0 4px 4px 0;
+    font-size: 11px;
+    font-family: ui-monospace, monospace;
+  }
+  .controls {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 10px 16px;
+    margin: 12px 0;
+    padding-top: 12px;
+    border-top: 1px dashed var(--border);
+  }
+  .field { display: flex; flex-direction: column; gap: 4px; }
+  .field label { font-size: 12px; color: var(--muted); font-weight: 500; }
+  .field label .req { color: var(--fail); }
+  .field input[type="text"], .field select, .field textarea {
+    font: inherit;
+    padding: 6px 8px;
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    background: #fff;
+  }
+  .field textarea { resize: vertical; min-height: 48px; }
+  .field input:focus, .field select:focus, .field textarea:focus {
+    outline: 2px solid var(--accent);
+    outline-offset: -1px;
+  }
+  .field.invalid input, .field.invalid select { border-color: var(--fail); }
+  .actions { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+  .actions .spacer { flex: 1; }
+  .note {
+    background: #fff8e1;
+    border: 1px solid #f0d98a;
+    color: #6b4d00;
+    border-radius: 6px;
+    padding: 8px 12px;
+    font-size: 12px;
+    margin: 8px 0;
+  }
+  .note.err {
+    background: #fde9e7;
+    border-color: #efb4ae;
+    color: #7a1f18;
+  }
+  .decision-info {
+    margin-top: 10px;
+    padding: 8px 12px;
+    background: #eef4fb;
+    border-radius: 6px;
+    font-size: 12px;
+    color: #2b4a73;
+  }
+  .hidden { display: none !important; }
+  .thumb-wrap { margin-top: 10px; }
+  .thumb-wrap img {
+    max-width: 220px;
+    max-height: 220px;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+  }
+  .empty-state {
+    text-align: center;
+    color: var(--muted);
+    padding: 40px 20px;
+  }
+  .toast {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    background: #1d2330;
+    color: #fff;
+    padding: 12px 18px;
+    border-radius: 8px;
+    box-shadow: 0 6px 18px rgba(0,0,0,.2);
+    opacity: 0;
+    transition: opacity .2s;
+    pointer-events: none;
+    z-index: 100;
+    max-width: 360px;
+  }
+  .toast.show { opacity: 1; }
+  .toast.err { background: var(--fail); }
+  .toast.ok { background: var(--pass); }
+  .pill {
+    display: inline-block;
+    padding: 1px 8px;
+    border-radius: 10px;
+    background: #e6e9ee;
+    font-size: 11px;
+    font-weight: 600;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div>
+    <h1>WAAM — Модерация</h1>
+    <div class="sub">Human moderation · шаг 06 · локальный режим, без сети</div>
+  </div>
+  <div class="sub" id="header-status">Загрузите данные</div>
+</header>
+
+<div class="container">
+
+  <!-- Load panel -->
+  <section class="panel" id="load-panel">
+    <h2>1. Загрузка данных</h2>
+    <div class="row">
+      <label class="file-label">
+        Загрузить verified-*.json
+        <input type="file" id="verified-input" accept=".json,application/json">
+      </label>
+      <span class="muted" id="verified-name">не выбран</span>
+    </div>
+    <div class="row">
+      <label class="file-label">
+        Загрузить artworks.json
+        <input type="file" id="artworks-input" accept=".json,application/json">
+      </label>
+      <span class="muted" id="artworks-name">не выбран (можно без него)</span>
+    </div>
+    <div class="row" id="fs-api-row">
+      <button class="secondary" id="fs-verified-btn">Выбрать через FS API: verified</button>
+      <button class="secondary" id="fs-artworks-btn">Выбрать через FS API: artworks</button>
+      <span class="muted" id="fs-api-note">File System Access API доступен</span>
+    </div>
+    <div class="row" id="summary-row" style="margin-top:14px;">
+      <div class="stats">
+        <div class="stat">Всего: <b id="stat-total">0</b></div>
+        <div class="stat pass">pass: <b id="stat-pass">0</b></div>
+        <div class="stat review">review: <b id="stat-review">0</b></div>
+        <div class="stat fail">fail: <b id="stat-fail">0</b></div>
+        <div class="stat">Каталог: <b id="stat-catalog">0</b></div>
+      </div>
+    </div>
+    <div class="row" style="margin-top:10px;">
+      <label style="display:inline-flex;align-items:center;gap:6px;font-size:13px;">
+        <input type="checkbox" id="show-thumbs"> Показывать превью (thumbnail)
+      </label>
+      <span class="muted">по умолчанию превью скрыты (link_only)</span>
+    </div>
+  </section>
+
+  <!-- Filters -->
+  <section class="panel hidden" id="filter-panel">
+    <h2>2. Кандидаты</h2>
+    <div class="row">
+      <button class="secondary" data-filter="all">Все</button>
+      <button class="secondary" data-filter="review">review</button>
+      <button class="secondary" data-filter="pass">pass</button>
+      <button class="secondary" data-filter="fail">fail</button>
+      <button class="secondary" data-filter="undecided">Без решения</button>
+      <button class="secondary" data-filter="decided">С решением</button>
+    </div>
+  </section>
+
+  <div id="candidates"></div>
+
+  <div id="empty-state" class="empty-state hidden">
+    Загрузите <code>verified-*.json</code>, чтобы начать.
+  </div>
+
+  <!-- Save panel -->
+  <section class="panel hidden" id="save-panel">
+    <h2>3. Сохранение</h2>
+    <div class="row">
+      <button class="ok" id="save-btn">Сохранить каталог</button>
+      <span class="muted" id="save-hint">Формируются artworks.json, negative-collection.json, ingestion_logs.jsonl</span>
+    </div>
+    <div id="save-result" class="hidden" style="margin-top:12px;"></div>
+  </section>
+
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+"use strict";
+
+/* =========================================================================
+   State
+   ========================================================================= */
+const state = {
+  candidates: [],           // verified candidates (with _decision attached)
+  artworks: [],             // existing published catalog
+  verifiedFileName: null,
+  artworksFileName: null,
+  verifiedFileHandle: null,
+  artworksFileHandle: null,
+  fsApi: typeof window.showOpenFilePicker === "function" &&
+         typeof window.showSaveFilePicker === "function",
+  decisions: new Map(),     // external_id -> decision object
+  filter: "all",
+  showThumbs: false,
+  nextPassportSerial: 1,
+  catalogYear: new Date().getUTCFullYear()
+};
+
+/* =========================================================================
+   Utilities
+   ========================================================================= */
+function $(sel) { return document.querySelector(sel); }
+function $all(sel) { return Array.from(document.querySelectorAll(sel)); }
+
+function escapeHtml(s) {
+  if (s === null || s === undefined) return "";
+  return String(s)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+}
+
+function nowIso() {
+  return new Date().toISOString().replace(/\.\d{3}Z$/, "Z");
+}
+
+function toast(msg, kind) {
+  const el = $("#toast");
+  el.textContent = msg;
+  el.className = "toast show" + (kind ? " " + kind : "");
+  clearTimeout(toast._t);
+  toast._t = setTimeout(() => { el.className = "toast"; }, 3200);
+}
+
+function isNonEmptyString(v) {
+  return typeof v === "string" && v.trim().length > 0;
+}
+
+function worstVerdict(a, b) {
+  const rank = { pass: 0, review: 1, fail: 2 };
+  return rank[a] >= rank[b] ? a : b;
+}
+
+/* =========================================================================
+   File loading
+   ========================================================================= */
+function readFileAsJson(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => {
+      try {
+        resolve(JSON.parse(String(reader.result)));
+      } catch (e) {
+        reject(new Error("Некорректный JSON: " + e.message));
+      }
+    };
+    reader.onerror = () => reject(new Error("Ошибка чтения файла"));
+    reader.readAsText(file, "utf-8");
+  });
+}
+
+async function handleVerifiedFile(file) {
+  try {
+    const data = await readFileAsJson(file);
+    const arr = Array.isArray(data) ? data : [data];
+    state.candidates = arr.filter(x => x && typeof x === "object");
+    state.verifiedFileName = file.name;
+    state.decisions.clear();
+    $("#verified-name").textContent = file.name + " (" + state.candidates.length + " кандидатов)";
+    render();
+    toast("Загружено кандидатов: " + state.candidates.length, "ok");
+  } catch (e) {
+    toast("Ошибка загрузки verified: " + e.message, "err");
+  }
+}
+
+async function handleArtworksFile(file) {
+  try {
+    const data = await readFileAsJson(file);
+    const arr = Array.isArray(data) ? data : (data ? [data] : []);
+    state.artworks = arr.filter(x => x && typeof x === "object");
+    state.artworksFileName = file.name;
+    $("#artworks-name").textContent = file.name + " (" + state.artworks.length + " записей)";
+    recomputeCatalogState();
+    render();
+    toast("Каталог загружен: " + state.artworks.length, "ok");
+  } catch (e) {
+    toast("Ошибка загрузки artworks: " + e.message, "err");
+  }
+}
+
+/* =========================================================================
+   Catalog / passport numbering
+   ========================================================================= */
+function recomputeCatalogState() {
+  // Determine max serial among existing passport_ids in catalog.
+  let maxSerial = 0;
+  for (const art of state.artworks) {
+    const pid = art && art.passport_id;
+    if (typeof pid === "string") {
+      const m = pid.match(/^WAAM-(\d{4})-(\d{4})$/);
+      if (m) {
+        const serial = parseInt(m[2], 10);
+        if (serial > maxSerial) maxSerial = serial;
+      }
+    }
+  }
+  state.nextPassportSerial = maxSerial + 1;
+
+  // Also consider already-assigned passport_ids on candidates (from prior decisions in this session).
+  for (const dec of state.decisions.values()) {
+    if (dec.passport_id) {
+      const m = dec.passport_id.match(/^WAAM-(\d{4})-(\d{4})$/);
+      if (m) {
+        const serial = parseInt(m[2], 10);
+        if (serial >= state.nextPassportSerial) state.nextPassportSerial = serial + 1;
+      }
+    }
+  }
+  $("#stat-catalog").textContent = String(state.artworks.length);
+}
+
+function allocatePassportId() {
+  const year = new Date().getUTCFullYear();
+  const serial = state.nextPassportSerial++;
+  return "WAAM-" + year + "-" + String(serial).padStart(4, "0");
+}
+
+/* =========================================================================
+   Candidate identity
+   ========================================================================= */
+function candidateKey(c) {
+  const ext = c.external_id;
+  const src = c.source_id;
+  if (ext !== undefined && ext !== null && src) return src + "|" + ext;
+  // fallback
+  return "idx|" + state.candidates.indexOf(c);
+}
+
+function getDecision(c) {
+  return state.decisions.get(candidateKey(c)) || null;
+}
+
+/* =========================================================================
+   Publication check (allOf from PASSPORT_SCHEMA)
+   ========================================================================= */
+function checkPublicationReadiness(c, decision) {
+  // Returns { ready: bool, errors: [string], warnings: [string], effectiveScope: "display"|"link_only"|null }
+  const errors = [];
+  const warnings = [];
+
+  const prov = c.provenance_level;
+  const rights = decision.rights_status;
+  const ip = decision.third_party_ip_risk;
+
+  if (!(prov === "A" || prov === "B")) errors.push("provenance_level должен быть A или B");
+  if (!(rights === "confirmed" || rights === "external_link_only")) {
+    errors.push("rights_status должен быть confirmed или external_link_only");
+  }
+  if (!(ip === "low" || ip === "medium")) errors.push("third_party_ip_risk должен быть low или medium");
+  if (!isNonEmptyString(decision.rights_basis)) errors.push("rights_basis обязателен");
+
+  const hasContentHash = isNonEmptyString(c.content_hash) &&
+    /^sha256:[a-f0-9]{64}$/.test(c.content_hash);
+
+  let effectiveScope = decision.rights_scope;
+  if (!hasContentHash) {
+    warnings.push("content_hash отсутствует: публикация возможна только со scope link_only до появления хеша");
+    if (effectiveScope === "display") {
+      errors.push("display запрещён без content_hash");
+    }
+    if (effectiveScope === "thumbnail") {
+      errors.push("thumbnail запрещён без content_hash");
+    }
+    if (!effectiveScope || effectiveScope === "display") {
+      effectiveScope = "link_only";
+    }
+  }
+
+  return {
+    ready: errors.length === 0,
+    errors,
+    warnings,
+    effectiveScope
+  };
+}
+
+/* =========================================================================
+   Rendering
+   ========================================================================= */
+function renderSummary() {
+  let pass = 0, review = 0, fail = 0;
+  for (const c of state.candidates) {
+    const v = (c.verification && c.verification.verdict) || "review";
+    if (v === "pass") pass++;
+    else if (v === "review") review++;
+    else fail++;
+  }
+  $("#stat-total").textContent = String(state.candidates.length);
+  $("#stat-pass").textContent = String(pass);
+  $("#stat-review").textContent = String(review);
+  $("#stat-fail").textContent = String(fail);
+  $("#stat-catalog").textContent = String(state.artworks.length);
+}
+
+function verdictBadgeClass(v) {
+  return v === "pass" ? "pass" : v === "review" ? "review" : "fail";
+}
+
+function reasonChips(reasons) {
+  if (!Array.isArray(reasons) || reasons.length === 0) return "";
+  return reasons.map(r => `<span class="reason-chip">${escapeHtml(r)}</span>`).join("");
+}
+
+function renderCandidate(c) {
+  const key = candidateKey(c);
+  const decision = getDecision(c);
+  const ver = c.verification || {};
+  const verdict = ver.verdict || "review";
+  const reasons = Array.isArray(ver.reasons) ? ver.reasons : [];
+
+  const card = document.createElement("div");
+  card.className = "card" + (decision ? " decided" : "");
+  if (decision) {
+    if (decision.action === "reject") card.classList.add("rejected");
+    else if (decision.action === "defer") card.classList.add("deferred");
+  }
+
+  const title = c.title || "(без названия)";
+  const sourceUrl = c.source_url || "";
+
+  let headHtml = `
+    <div class="card-head">
+      <div style="flex:1;min-width:240px;">
+        <div class="card-title">${escapeHtml(title)}</div>
+        <div class="muted">
+          ${escapeHtml(c.source_id || "—")}
+          ${c.external_id !== undefined && c.external_id !== null ? " · ID " + escapeHtml(String(c.external_id)) : ""}
+          ${sourceUrl ? " · " : ""}
+          ${sourceUrl ? `<a href="${escapeHtml(sourceUrl)}" target="_blank" rel="noopener noreferrer">Открыть источник</a>` : ""}
+        </div>
+      </div>
+      <div>
+        <span class="badge ${verdictBadgeClass(verdict)}">${escapeHtml(verdict)}</span>
+        ${decision ? `<span class="badge decision">${escapeHtml(decisionLabel(decision.action))}</span>` : ""}
+      </div>
+    </div>
+  `;
+
+  let kvHtml = `
+    <dl class="kv">
+      <dt>creator</dt><dd>${escapeHtml(c.creator || "—")}</dd>
+      <dt>model_name</dt><dd>${escapeHtml(c.model_name || "—")}</dd>
+      <dt>image_generator</dt><dd>${escapeHtml(c.image_generator || "—")}</dd>
+      <dt>provenance_level</dt><dd>${escapeHtml(c.provenance_level || "—")}</dd>
+      <dt>rights_status</dt><dd>${escapeHtml(c.rights_status || "—")}</dd>
+      <dt>rights_hint</dt><dd>${escapeHtml(c.verification && c.verification.rights_hint ? JSON.stringify(c.verification.rights_hint) : "—")}</dd>
+      <dt>third_party_ip_risk</dt><dd>${escapeHtml(c.third_party_ip_risk || "—")}</dd>
+      <dt>source_jurisdiction</dt><dd>${escapeHtml(c.source_jurisdiction || "—")}</dd>
+      <dt>content_hash</dt><dd>${escapeHtml(c.content_hash || "—")}</dd>
+      <dt>reasons</dt><dd class="reasons">${reasonChips(reasons) || "<span class='muted'>—</span>"}</dd>
+    </dl>
+  `;
+
+  // thumbnail
+  let thumbHtml = "";
+  if (state.showThumbs && c.preview_url) {
+    thumbHtml = `<div class="thumb-wrap"><img src="${escapeHtml(c.preview_url)}" alt="" loading="lazy" referrerpolicy="no-referrer"></div>`;
+  }
+
+  // controls
+  const rightsBasisVal = decision ? (decision.rights_basis || "") : "";
+  const ipVal = decision ? (decision.third_party_ip_risk || "") : "";
+  const jurisVal = decision ? (decision.source_jurisdiction || (c.source_jurisdiction === "unknown" ? "" : c.source_jurisdiction) || "") : (c.source_jurisdiction === "unknown" ? "" : c.source_jurisdiction) || "";
+  const reasonVal = decision ? (decision.reason || "") : "";
+
+  const controlsHtml = `
+    <div class="controls" data-role="controls">
+      <div class="field">
+        <label>Основание прав (rights_basis) <span class="req">*</span></label>
+        <input type="text" data-field="rights_basis" placeholder="URL или ID документа" value="${escapeHtml(rightsBasisVal)}">
+      </div>
+      <div class="field">
+        <label>IP-риск <span class="req">*</span></label>
+        <select data-field="third_party_ip_risk">
+          <option value="">— выберите —</option>
+          <option value="low"${ipVal === "low" ? " selected" : ""}>low</option>
+          <option value="medium"${ipVal === "medium" ? " selected" : ""}>medium</option>
+          <option value="high"${ipVal === "high" ? " selected" : ""}>high (блокирует публикацию)</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Юрисдикция</label>
+        <input type="text" data-field="source_jurisdiction" placeholder="ISO alpha-2 или unknown" value="${escapeHtml(jurisVal)}" maxlength="8">
+      </div>
+      <div class="field" style="grid-column: 1 / -1;">
+        <label>Комментарий (reason)</label>
+        <textarea data-field="reason" placeholder="необязательно">${escapeHtml(reasonVal)}</textarea>
+      </div>
+    </div>
+  `;
+
+  // live readiness display
+  const readiness = decision ? checkPublicationReadiness(c, decision) : null;
+  let readinessHtml = "";
+  if (decision && (decision.action === "confirm" || decision.action === "link")) {
+    const errs = readiness.errors.map(e => `<div>• ${escapeHtml(e)}</div>`).join("");
+    const warns = readiness.warnings.map(w => `<div>• ${escapeHtml(w)}</div>`).join("");
+    if (errs) {
+      readinessHtml += `<div class="note err"><b>Публикация заблокирована:</b>${errs}</div>`;
+    }
+    if (warns) {
+      readinessHtml += `<div class="note">${warns}</div>`;
+    }
+    if (readiness.ready && !errs) {
+      readinessHtml += `<div class="note"><b>Готово к публикации.</b> scope: <span class="pill">${escapeHtml(readiness.effectiveScope)}</span></div>`;
+    }
+  }
+
+  const actionsHtml = `
+    <div class="actions" data-role="actions">
+      <button class="ok" data-action="confirm">Подтвердить (display)</button>
+      <button data-action="link">Только ссылка</button>
+      <button class="danger" data-action="reject">Отклонить</button>
+      <button class="warn" data-action="defer">Отложить</button>
+      <div class="spacer"></div>
+      <button class="secondary" data-action="reset">Сбросить решение</button>
+    </div>
+  `;
+
+  let decisionInfo = "";
+  if (decision) {
+    const bits = [];
+    bits.push("решение: <b>" + escapeHtml(decisionLabel(decision.action)) + "</b>");
+    if (decision.passport_id) bits.push("passport_id: <b>" + escapeHtml(decision.passport_id) + "</b>");
+    if (decision.rights_status) bits.push("rights_status: " + escapeHtml(decision.rights_status));
+    if (decision.rights_scope) bits.push("rights_scope: " + escapeHtml(decision.rights_scope));
+    if (decision.timestamp) bits.push("время: " + escapeHtml(decision.timestamp));
+    decisionInfo = `<div class="decision-info">${bits.join(" · ")}</div>`;
+  }
+
+  card.innerHTML = headHtml + kvHtml + thumbHtml + controlsHtml + readinessHtml + actionsHtml + decisionInfo;
+
+  // Wire input changes
+  const controls = card.querySelector('[data-role="controls"]');
+  controls.querySelectorAll("input, select, textarea").forEach(el => {
+    el.addEventListener("input", () => {
+      const field = el.getAttribute("data-field");
+      if (!field) return;
+      const dec = getDecision(c);
+      if (!dec) return;
+      if (field === "third_party_ip_risk") dec.third_party_ip_risk = el.value;
+      else if (field === "source_jurisdiction") dec.source_jurisdiction = el.value.trim() || "unknown";
+      else dec[field] = el.value;
+      updateDecisionAndRerender(c, dec);
+    });
+  });
+
+  // Wire buttons
+  card.querySelectorAll('[data-action]').forEach(btn => {
+    btn.addEventListener("click", () => handleAction(c, btn.getAttribute("data-action"), card));
+  });
+
+  return card;
+}
+
+function decisionLabel(action) {
+  switch (action) {
+    case "confirm": return "Подтверждено (display)";
+    case "link":    return "Только ссылка";
+    case "reject":  return "Отклонено";
+    case "defer":   return "Отложено";
+    default:        return action;
+  }
+}
+
+function render() {
+  renderSummary();
+
+  const list = $("#candidates");
+  list.innerHTML = "";
+
+  if (!state.candidates.length) {
+    $("#empty-state").classList.remove("hidden");
+    $("#filter-panel").classList.add("hidden");
+    $("#save-panel").classList.add("hidden");
+    return;
+  }
+  $("#empty-state").classList.add("hidden");
+  $("#filter-panel").classList.remove("hidden");
+  $("#save-panel").classList.remove("hidden");
+
+  let shown = 0;
+  for (const c of state.candidates) {
+    if (!matchesFilter(c)) continue;
+    list.appendChild(renderCandidate(c));
+    shown++;
+  }
+  if (shown === 0) {
+    const msg = document.createElement("div");
+    msg.className = "empty-state";
+    msg.textContent = "Нет кандидатов под текущим фильтром.";
+    list.appendChild(msg);
+  }
+}
+
+function matchesFilter(c) {
+  const ver = (c.verification && c.verification.verdict) || "review";
+  const dec = getDecision(c);
+  switch (state.filter) {
+    case "review":    return ver === "review";
+    case "pass":      return ver === "pass";
+    case "fail":      return ver === "fail";
+    case "undecided": return !dec;
+    case "decided":   return !!dec;
+    default:          return true;
+  }
+}
+
+/* =========================================================================
+   Decisions
+   ========================================================================= */
+function ensureDecision(c) {
+  const key = candidateKey(c);
+  let dec = state.decisions.get(key);
+  if (!dec) {
+    dec = {
+      action: null,
+      rights_basis: "",
+      third_party_ip_risk: "",
+      source_jurisdiction: (c.source_jurisdiction && c.source_jurisdiction !== "unknown") ? c.source_jurisdiction : "",
+      reason: "",
+      passport_id: null,
+      rights_status: null,
+      rights_scope: null,
+      timestamp: null
+    };
+    state.decisions.set(key, dec);
+  }
+  return dec;
+}
+
+function updateDecisionAndRerender(c, dec) {
+  // Recompute passport allocation / readiness on every change.
+  const r = checkPublicationReadiness(c, dec);
+  dec._readiness = r;
+
+  // Re-render just this card (simple: full render keeps things consistent).
+  render();
+}
+
+function handleAction(c, action, cardEl) {
+  const dec = ensureDecision(c);
+
+  // Pull current field values straight from the card's inputs before deciding.
+  if (cardEl) {
+    const rb = cardEl.querySelector('[data-field="rights_basis"]');
+    const ip = cardEl.querySelector('[data-field="third_party_ip_risk"]');
+    const ju = cardEl.querySelector('[data-field="source_jurisdiction"]');
+    const rs = cardEl.querySelector('[data-field="reason"]');
+    if (rb) dec.rights_basis = rb.value.trim();
+    if (ip) dec.third_party_ip_risk = ip.value;
+    if (ju) dec.source_jurisdiction = ju.value.trim() || "unknown";
+    if (rs) dec.reason = rs.value;
+  }
+
+  if (action === "reset") {
+    state.decisions.delete(candidateKey(c));
+    render();
+    return;
+  }
+
+  if (action === "defer") {
+    dec.action = "defer";
+    dec.rights_status = null;
+    dec.rights_scope = null;
+    dec.passport_id = null;
+    dec.timestamp = nowIso();
+    render();
+    return;
+  }
+
+  if (action === "reject") {
+    dec.action = "reject";
+    dec.rights_status = "denied";
+    dec.rights_scope = null;
+    dec.passport_id = null;
+    dec.timestamp = nowIso();
+    render();
+    return;
+  }
+
+  if (action === "confirm" || action === "link") {
+    // Validation gate: rights_basis + ip risk
+    const errs = [];
+    if (!isNonEmptyString(dec.rights_basis)) errs.push("Укажите основание прав (rights_basis)");
+    if (!dec.third_party_ip_risk) errs.push("Выберите IP-риск");
+    if (dec.third_party_ip_risk === "high") errs.push("IP-риск high блокирует публикацию");
+    if (!dec.source_jurisdiction) dec.source_jurisdiction = "unknown";
+
+    if (errs.length) {
+      toast(errs.join("; "), "err");
+      // visually flag missing fields
+      flagMissingFields(c, errs);
+      return;
+    }
+
+    const desiredScope = action === "confirm" ? "display" : "link_only";
+    const tentative = {
+      rights_basis: dec.rights_basis,
+      third_party_ip_risk: dec.third_party_ip_risk,
+      rights_status: action === "confirm" ? "confirmed" : "external_link_only",
+      rights_scope: desiredScope,
+      source_jurisdiction: dec.source_jurisdiction || "unknown"
+    };
+
+    const check = checkPublicationReadiness(c, tentative);
+    if (!check.ready) {
+      toast(check.errors.join("; "), "err");
+      return;
+    }
+
+    // Effective scope: if content_hash missing, force link_only.
+    const effectiveScope = check.effectiveScope || desiredScope;
+
+    dec.action = action;
+    dec.rights_status = tentative.rights_status;
+    dec.rights_scope = effectiveScope;
+    dec.source_jurisdiction = tentative.source_jurisdiction;
+    dec.timestamp = nowIso();
+
+    // Assign passport_id for confirmed/link decisions (only once per candidate).
+    if (!dec.passport_id) {
+      // Ensure uniqueness against already allocated in this session AND catalog.
+      let allocated = null;
+      let attempts = 0;
+      while (!allocated && attempts < 10000) {
+        attempts++;
+        const candidatePid = allocatePassportId();
+        const existsInCatalog = state.artworks.some(a => a && a.passport_id === candidatePid);
+        const existsInSession = Array.from(state.decisions.values()).some(
+          d => d !== dec && d.passport_id === candidatePid
+        );
+        if (!existsInCatalog && !existsInSession) {
+          allocated = candidatePid;
+        }
+      }
+      dec.passport_id = allocated;
+    }
+
+    if (check.warnings.length) {
+      toast(check.warnings.join("; "), "ok");
+    }
+
+    render();
+    return;
+  }
+}
+
+function flagMissingFields(c, errs) {
+  // Lightweight: just toast already done; optionally scroll to first card.
+  const list = $("#candidates");
+  if (list && list.firstChild) {
+    list.firstChild.scrollIntoView({ behavior: "smooth", block: "nearest" });
+  }
+}
+
+/* =========================================================================
+   Build output artifacts
+   ========================================================================= */
+function buildArtworksOutput() {
+  // Start from existing catalog.
+  const out = state.artworks.map(a => Object.assign({}, a));
+  const now = nowIso();
+
+  for (const c of state.candidates) {
+    const dec = getDecision(c);
+    if (!dec) continue;
+    if (dec.action !== "confirm" && dec.action !== "link") continue;
+
+    const check = checkPublicationReadiness(c, {
+      rights_status: dec.rights_status,
+      rights_scope: dec.rights_scope,
+      rights_basis: dec.rights_basis,
+      third_party_ip_risk: dec.third_party_ip_risk,
+      source_jurisdiction: dec.source_jurisdiction
+    });
+    if (!check.ready) continue;
+
+    // Build published passport from candidate.
+    const passport = Object.assign({}, c);
+    delete passport.verification;
+
+    passport.passport_id = dec.passport_id;
+    passport.passport_version = 1;
+    passport.status = "published";
+    passport.rights_status = dec.rights_status;
+    passport.rights_scope = check.effectiveScope || dec.rights_scope;
+    passport.rights_basis = dec.rights_basis;
+    passport.third_party_ip_risk = dec.third_party_ip_risk;
+    passport.source_jurisdiction = dec.source_jurisdiction || "unknown";
+    passport.created_at = c.created_at || now;
+    passport.updated_at = now;
+
+    // History: append moderated event.
+    const hist = Array.isArray(passport.history) ? passport.history.slice() : [];
+    // If candidate history was a single object (older verify.ps1 output), normalize.
+    if (hist.length === 0 && passport.history && typeof passport.history === "object" && !Array.isArray(passport.history)) {
+      hist.push(passport.history);
+    }
+    const comment = (dec.reason || "").trim();
+    hist.push({
+      event: "moderated",
+      timestamp: now,
+      actor: "moderator",
+      reason: (dec.action === "confirm" ? "confirm" : "link") + (comment ? ": " + comment : "")
+    });
+    passport.history = hist;
+
+    out.push(passport);
+  }
+
+  return out;
+}
+
+function buildNegativeCollection() {
+  const out = [];
+  const now = nowIso();
+  for (const c of state.candidates) {
+    const dec = getDecision(c);
+    if (!dec || dec.action !== "reject") continue;
+    out.push({
+      passport_id: dec.passport_id || null,
+      external_id: c.external_id !== undefined ? c.external_id : null,
+      source_id: c.source_id || null,
+      reason: (dec.reason || "").trim(),
+      rejected_at: now
+    });
+  }
+  return out;
+}
+
+function buildIngestionLogLines() {
+  const lines = [];
+  const now = nowIso();
+  for (const c of state.candidates) {
+    const dec = getDecision(c);
+    if (!dec) continue; // only logged decisions
+    lines.push(JSON.stringify({
+      timestamp: now,
+      source_file: state.verifiedFileName || null,
+      external_id: c.external_id !== undefined ? c.external_id : null,
+      source_id: c.source_id || null,
+      decision: dec.action,
+      passport_id: dec.passport_id || null,
+      reason: (dec.reason || "").trim()
+    }));
+  }
+  return lines;
+}
+
+/* =========================================================================
+   Save
+   ========================================================================= */
+async function saveAll() {
+  const btn = $("#save-btn");
+  btn.disabled = true;
+  btn.textContent = "Сохранение…";
+  try {
+    const artworksOut = buildArtworksOutput();
+    const negativeOut = buildNegativeCollection();
+    const logsOut = buildIngestionLogLines();
+
+    const artworksJson = JSON.stringify(artworksOut, null, 2);
+    const negativeJson = JSON.stringify(negativeOut, null, 2);
+    const logsJsonl = logsOut.join("\n") + (logsOut.length ? "\n" : "");
+
+    const timestamp = (() => {
+      const d = new Date();
+      const pad = n => String(n).padStart(2, "0");
+      return d.getUTCFullYear() + pad(d.getUTCMonth() + 1) + pad(d.getUTCDate()) +
+             "-" + pad(d.getUTCHours()) + pad(d.getUTCMinutes()) + pad(d.getUTCSeconds());
+    })();
+
+    if (state.fsApi) {
+      // FS API: try to write in place using existing handles, or prompt.
+      try {
+        await saveViaFsApi("artworks.json", artworksJson, state.artworksFileHandle);
+        await saveViaFsApi("negative-collection.json", negativeJson, null);
+        await saveViaFsApi("ingestion_logs.jsonl", logsJsonl, null);
+        toast("Файлы сохранены через FS API", "ok");
+        $("#save-result").classList.remove("hidden");
+        $("#save-result").innerHTML =
+          "<div class='note'>" +
+          "<b>Сохранено через File System Access API.</b><br>" +
+          "Проверьте, что <code>" + escapeHtml(state.verifiedFileName || "verified-*.json") +
+          "</code> переименован в <code>.moderated</code> (вручную)." +
+          "</div>";
+      } catch (e) {
+        // Fall back to download.
+        console.warn("FS API save failed, falling back to download:", e);
+        downloadFile("artworks-" + timestamp + ".json", artworksJson);
+        downloadFile("negative-collection-" + timestamp + ".json", negativeJson);
+        downloadFile("ingestion_logs-" + timestamp + ".jsonl", logsJsonl);
+        toast("FS API не сработал — файлы скачаны", "ok");
+        $("#save-result").classList.remove("hidden");
+        $("#save-result").innerHTML =
+          "<div class='note'>" +
+          "<b>Файлы скачаны.</b> Переименуйте исходный <code>" +
+          escapeHtml(state.verifiedFileName || "verified-*.json") +
+          "</code> в <code>" + escapeHtml((state.verifiedFileName || "verified-*.json")) +
+          ".moderated</code> вручную." +
+          "</div>";
+      }
+    } else {
+      downloadFile("artworks-" + timestamp + ".json", artworksJson);
+      downloadFile("negative-collection-" + timestamp + ".json", negativeJson);
+      downloadFile("ingestion_logs-" + timestamp + ".jsonl", logsJsonl);
+      toast("Файлы скачаны", "ok");
+      $("#save-result").classList.remove("hidden");
+      $("#save-result").innerHTML =
+        "<div class='note'>" +
+        "<b>Файлы скачаны.</b> Переименуйте исходный <code>" +
+        escapeHtml(state.verifiedFileName || "verified-*.json") +
+        "</code> в <code>" + escapeHtml((state.verifiedFileName || "verified-*.json")) +
+        ".moderated</code> вручную." +
+        "</div>";
+    }
+
+    // Update in-memory catalog to reflect published works (so numbering continues correctly).
+    state.artworks = artworksOut;
+    recomputeCatalogState();
+    renderSummary();
+  } catch (e) {
+    toast("Ошибка сохранения: " + e.message, "err");
+  } finally {
+    btn.disabled = false;
+    btn.textContent = "Сохранить каталог";
+  }
+}
+
+async function saveViaFsApi(suggestedName, content, existingHandle) {
+  let handle = existingHandle;
+  if (!handle) {
+    handle = await window.showSaveFilePicker({
+      suggestedName: suggestedName,
+      types: [{ description: "JSON / JSONL", accept: { "application/json": [".json", ".jsonl"] } }]
+    });
+  }
+  const writable = await handle.createWritable();
+  await writable.write(content);
+  await writable.close();
+  return handle;
+}
+
+function downloadFile(filename, content) {
+  const blob = new Blob([content], { type: "application/octet-stream" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+}
+
+/* =========================================================================
+   FS API pickers
+   ========================================================================= */
+async function pickVerifiedViaFs() {
+  try {
+    const [handle] = await window.showOpenFilePicker({
+      types: [{ description: "JSON", accept: { "application/json": [".json"] } }]
+    });
+    state.verifiedFileHandle = handle;
+    const file = await handle.getFile();
+    await handleVerifiedFile(file);
+  } catch (e) {
+    if (e && e.name !== "AbortError") toast("Не удалось выбрать файл: " + e.message, "err");
+  }
+}
+
+async function pickArtworksViaFs() {
+  try {
+    const [handle] = await window.showOpenFilePicker({
+      types: [{ description: "JSON", accept: { "application/json": [".json"] } }]
+    });
+    state.artworksFileHandle = handle;
+    const file = await handle.getFile();
+    await handleArtworksFile(file);
+  } catch (e) {
+    if (e && e.name !== "AbortError") toast("Не удалось выбрать файл: " + e.message, "err");
+  }
+}
+
+/* =========================================================================
+   Wiring
+   ========================================================================= */
+function wireUi() {
+  // Show/hide FS API row.
+  if (!state.fsApi) {
+    $("#fs-api-row").classList.add("hidden");
+  }
+
+  // Hidden inputs.
+  $("#verified-input").addEventListener("change", async e => {
+    const file = e.target.files && e.target.files[0];
+    if (file) await handleVerifiedFile(file);
+    e.target.value = "";
+  });
+  $("#artworks-input").addEventListener("change", async e => {
+    const file = e.target.files && e.target.files[0];
+    if (file) await handleArtworksFile(file);
+    e.target.value = "";
+  });
+
+  // FS API buttons.
+  $("#fs-verified-btn").addEventListener("click", pickVerifiedViaFs);
+  $("#fs-artworks-btn").addEventListener("click", pickArtworksViaFs);
+
+  // Thumbnail toggle.
+  $("#show-thumbs").addEventListener("change", e => {
+    state.showThumbs = !!e.target.checked;
+    render();
+  });
+
+  // Filter buttons.
+  $all("#filter-panel [data-filter]").forEach(btn => {
+    btn.addEventListener("click", () => {
+      state.filter = btn.getAttribute("data-filter");
+      // Highlight active filter.
+      $all("#filter-panel [data-filter]").forEach(b => b.classList.remove("ok"));
+      btn.classList.add("ok");
+      render();
+    });
+  });
+
+  // Save.
+  $("#save-btn").addEventListener("click", saveAll);
+
+  // Header status.
+  updateHeaderStatus();
+}
+
+function updateHeaderStatus() {
+  const el = $("#header-status");
+  if (!state.candidates.length) {
+    el.textContent = "Загрузите данные";
+    return;
+  }
+  const decided = Array.from(state.decisions.values()).filter(d => d.action && d.action !== "defer").length;
+  el.textContent = "Кандидатов: " + state.candidates.length + " · с решением: " + decided;
+}
+
+// Patch render to also update header status and catalog stat.
+const _render = render;
+render = function () {
+  _render();
+  updateHeaderStatus();
+  renderSummary();
+};
+
+/* =========================================================================
+   Init
+   ========================================================================= */
+document.addEventListener("DOMContentLoaded", () => {
+  wireUi();
+  recomputeCatalogState();
+  render();
+});
+</script>
+</body>
+</html>
