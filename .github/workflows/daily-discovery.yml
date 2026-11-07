@@ -1,0 +1,209 @@
+# WAAM daily discovery: Discovered -> Verified.
+# Runs discover.ps1 then verify.ps1, commits new data, emails summary.
+# Does NOT publish anything to the catalog.
+
+name: Daily Discovery
+
+on:
+  schedule:
+    # 16:00 UTC = 19:00 MSK
+    - cron: "0 16 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: daily-discovery
+  cancel-in-progress: false
+
+jobs:
+  discover-verify:
+    runs-on: windows-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Run discovery (Civitai)
+        shell: pwsh
+        run: ./cli/discover.ps1 -Limit 10
+
+      - name: Run verification
+        shell: pwsh
+        run: ./cli/verify.ps1
+
+      - name: Build summary from latest verified file
+        id: summary
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = "Stop"
+
+          $incoming = Join-Path $PWD "data/incoming"
+          $latest = $null
+          if (Test-Path $incoming) {
+            $latest = Get-ChildItem -Path $incoming -Filter "verified-*.json" -File -ErrorAction SilentlyContinue |
+              Sort-Object LastWriteTimeUtc -Descending |
+              Select-Object -First 1
+          }
+
+          $pass = 0
+          $review = 0
+          $fail = 0
+          $reviewLines = New-Object System.Collections.ArrayList
+          $total = 0
+
+          if ($null -ne $latest) {
+            $raw = Get-Content -Path $latest.FullName -Raw -Encoding UTF8
+            if (-not [string]::IsNullOrWhiteSpace($raw)) {
+              $items = @($raw | ConvertFrom-Json)
+              $total = $items.Count
+              foreach ($item in $items) {
+                $verdict = $null
+                if ($null -ne $item.verification -and $null -ne $item.verification.verdict) {
+                  $verdict = [string]$item.verification.verdict
+                }
+                switch ($verdict) {
+                  "pass"   { $pass++ }
+                  "review" {
+                    $review++
+                    $title = if ($item.title) { [string]$item.title } else { "(без названия)" }
+                    $url = if ($item.source_url) { [string]$item.source_url } else { "" }
+                    [void]$reviewLines.Add("- $title`n  $url")
+                  }
+                  "fail"   { $fail++ }
+                  default  { $review++ }
+                }
+              }
+            }
+          }
+
+          # Compose a plain-text body for the email.
+          $stamp = (Get-Date).ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ssZ")
+          $body = New-Object System.Text.StringBuilder
+          [void]$body.AppendLine("Выполнено")
+          [void]$body.AppendLine("")
+          [void]$body.AppendLine("Время (UTC): $stamp")
+          [void]$body.AppendLine("Свежий файл: $(if ($latest) { $latest.Name } else { '(нет)' })")
+          [void]$body.AppendLine("")
+          [void]$body.AppendLine("Всего кандидатов: $total")
+          [void]$body.AppendLine("  pass:   $pass")
+          [void]$body.AppendLine("  review: $review")
+          [void]$body.AppendLine("  fail:   $fail")
+          [void]$body.AppendLine("")
+
+          if ($reviewLines.Count -gt 0) {
+            [void]$body.AppendLine("Кандидаты на ручную модерацию (review):")
+            [void]$body.AppendLine("")
+            foreach ($line in $reviewLines) { [void]$body.AppendLine($line) }
+          } else {
+            [void]$body.AppendLine("Кандидатов на ручную модерацию нет.")
+          }
+
+          [void]$body.AppendLine("")
+          [void]$body.AppendLine("Публикация в каталог не выполнялась — требуется ручная модерация (moderate.html).")
+
+          # Write body to a file so the mail action can read it without shell-escaping issues.
+          $bodyFile = Join-Path $PWD "data/incoming/_email_body.txt"
+          Set-Content -Path $bodyFile -Value $body.ToString() -Encoding UTF8
+
+          # Export outputs for subsequent steps.
+          "total=$total"   | Out-File -FilePath $env:GITHUB_OUTPUT -Append -Encoding utf8
+          "pass=$pass"     | Out-File -FilePath $env:GITHUB_OUTPUT -Append -Encoding utf8
+          "review=$review" | Out-File -FilePath $env:GITHUB_OUTPUT -Append -Encoding utf8
+          "fail=$fail"     | Out-File -FilePath $env:GITHUB_OUTPUT -Append -Encoding utf8
+          "body_file=data/incoming/_email_body.txt" | Out-File -FilePath $env:GITHUB_OUTPUT -Append -Encoding utf8
+          "latest_file=$(if ($latest) { 'data/incoming/' + $latest.Name } else { '' })" | Out-File -FilePath $env:GITHUB_OUTPUT -Append -Encoding utf8
+
+      - name: Commit and push new data (if any)
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = "Stop"
+          git config user.name  "waam-bot"
+          git config user.email "waam-bot@users.noreply.github.com"
+
+          # Remove the transient email body from the committed tree.
+          if (Test-Path "data/incoming/_email_body.txt") {
+            Remove-Item -Path "data/incoming/_email_body.txt" -Force
+          }
+
+          git add data/
+          $staged = git diff --cached --name-only
+          if ([string]::IsNullOrWhiteSpace($staged)) {
+            Write-Host "No data changes to commit."
+            exit 0
+          }
+
+          $date = (Get-Date).ToUniversalTime().ToString("yyyy-MM-dd")
+          git commit -m "Daily discovery $date"
+          git push
+
+      - name: Prepare email body (post-commit; body file is not committed)
+        if: always()
+        shell: pwsh
+        run: |
+          # Rebuild the body file if the previous step removed it during commit.
+          $summaryBody = Join-Path $PWD "data/incoming/_email_body.txt"
+          if (-not (Test-Path $summaryBody)) {
+            # Summary step already ran; file might have been removed before commit.
+            # Regenerate minimal body from outputs.
+            $total  = "${{ steps.summary.outputs.total }}"
+            $pass   = "${{ steps.summary.outputs.pass }}"
+            $review = "${{ steps.summary.outputs.review }}"
+            $fail   = "${{ steps.summary.outputs.fail }}"
+            $sb = New-Object System.Text.StringBuilder
+            [void]$sb.AppendLine("Выполнено")
+            [void]$sb.AppendLine("")
+            [void]$sb.AppendLine("Всего: $total; pass: $pass; review: $review; fail: $fail")
+            [void]$sb.AppendLine("")
+            [void]$sb.AppendLine("Публикация в каталог не выполнялась — требуется ручная модерация (moderate.html).")
+            Set-Content -Path $summaryBody -Value $sb.ToString() -Encoding UTF8
+          }
+
+      - name: Send summary email
+        if: success()
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: smtp.gmail.com
+          server_port: 465
+          secure: true
+          username: ${{ secrets.SMTP_USERNAME }}
+          password: ${{ secrets.SMTP_PASSWORD }}
+          subject: "WAAM: подобрано ${{ steps.summary.outputs.total }} работ для модерации"
+          to: yvvinokurov1978@gmail.com
+          from: WAAM Bot <${{ secrets.SMTP_USERNAME }}>
+          body: file://data/incoming/_email_body.txt
+
+      - name: Send failure email
+        if: failure()
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: smtp.gmail.com
+          server_port: 465
+          secure: true
+          username: ${{ secrets.SMTP_USERNAME }}
+          password: ${{ secrets.SMTP_PASSWORD }}
+          subject: "WAAM: ошибка ежедневного автопоиска"
+          to: yvvinokurov1978@gmail.com
+          from: WAAM Bot <${{ secrets.SMTP_USERNAME }}>
+          body: |
+            Ежедневный автопоиск WAAM завершился с ошибкой.
+
+            Репозиторий: ${{ github.repository }}
+            Workflow:    ${{ github.workflow }}
+            Run:         ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+            Ветка:       ${{ github.ref_name }}
+            SHA:         ${{ github.sha }}
+
+            Проверьте лог запуска по ссылке выше.
+            Публикация в каталог не выполнялась.
+
+      - name: Cleanup transient email body
+        if: always()
+        shell: pwsh
+        run: |
+          $p = "data/incoming/_email_body.txt"
+          if (Test-Path $p) { Remove-Item -Path $p -Force }
