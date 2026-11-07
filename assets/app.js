@@ -214,11 +214,6 @@
         const subtitle = [a.category, a.creator || unknownLabel].filter(Boolean).join(' · ');
         const provLabel = currentLang === 'en' ? 'Provenance ' : currentLang === 'ru' ? 'Происхождение ' : '来源 ';
         const srcLabel = currentLang === 'en' ? 'View source →' : currentLang === 'ru' ? 'Открыть источник →' : '打开来源 →';
-        const catNote = currentLang === 'en'
-          ? 'Category page — no verified work yet'
-          : currentLang === 'ru'
-            ? 'Страница категории — проверенных работ пока нет'
-            : '分类页面 — 尚无经核验的作品';
         return '' +
           '<article class="art-card">' +
             '<div class="art-preview">' + preview + '</div>' +
@@ -226,7 +221,6 @@
               '<p class="art-meta">' + esc(a.passport_id) + '</p>' +
               '<h3 class="art-title">' + esc(a.title) + '</h3>' +
               '<p class="art-meta">' + esc(subtitle) + '</p>' +
-              '<p class="art-note">' + esc(catNote) + '</p>' +
               '<div>' +
                 '<span class="art-badge level-' + level.toLowerCase() + '">' + esc(provLabel) + esc(level) + '</span>' +
                 '<span class="art-badge">' + esc(a.rights_status) + '</span>' +
