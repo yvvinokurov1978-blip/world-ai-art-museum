@@ -1,4 +1,4 @@
-А# WAAM daily discovery: Discovered -> Verified.
+# WAAM daily discovery: Discovered -> Verified.
 # Runs discover.ps1 then verify.ps1, commits new data, emails summary.
 # Does NOT publish anything to the catalog.
 
